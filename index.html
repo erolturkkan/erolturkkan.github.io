@@ -1,0 +1,288 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>2025-2026 Güz Dönemi Sunulan Dersler</title>
+    
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- Google Fonts: Inter -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    
+    <!-- Custom Styles -->
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #f8fafc; /* Tailwind's gray-50 */
+        }
+        .tab-active {
+            border-color: #3b82f6; /* Tailwind's blue-500 */
+            color: #3b82f6;
+            background-color: #eff6ff; /* Tailwind's blue-50 */
+        }
+        .card-container {
+            transition: opacity 0.3s ease-in-out;
+        }
+        .modal-overlay {
+            transition: opacity 0.3s ease-in-out;
+        }
+        .modal-content {
+            transition: transform 0.3s ease-in-out;
+        }
+        .grouped-card {
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body class="antialiased">
+
+    <div class="container mx-auto p-4 sm:p-6 lg:p-8">
+        
+        <header class="text-center mb-8">
+            <h1 class="text-3xl sm:text-4xl font-bold text-gray-800">Bilgisayar ve Öğretim Teknolojileri Öğretmenliği</h1>
+            <p class="text-lg sm:text-xl text-blue-600 mt-2 font-semibold">2025-2026 Güz Dönemi Sunulan Dersler</p>
+        </header>
+
+        <div class="mb-8">
+            <div class="flex flex-wrap justify-center border-b border-gray-200">
+                <button data-tab="1" class="semester-tab text-sm sm:text-base font-medium text-center text-gray-500 border-b-2 border-transparent px-4 py-3 hover:text-gray-600 hover:border-gray-300 transition-colors duration-300 tab-active">1. Yarıyıl</button>
+                <button data-tab="3" class="semester-tab text-sm sm:text-base font-medium text-center text-gray-500 border-b-2 border-transparent px-4 py-3 hover:text-gray-600 hover:border-gray-300 transition-colors duration-300">3. Yarıyıl</button>
+                <button data-tab="5" class="semester-tab text-sm sm:text-base font-medium text-center text-gray-500 border-b-2 border-transparent px-4 py-3 hover:text-gray-600 hover:border-gray-300 transition-colors duration-300">5. Yarıyıl</button>
+                <button data-tab="7" class="semester-tab text-sm sm:text-base font-medium text-center text-gray-500 border-b-2 border-transparent px-4 py-3 hover:text-gray-600 hover:border-gray-300 transition-colors duration-300">7. Yarıyıl</button>
+                <button data-tab="BTS" class="semester-tab text-sm sm:text-base font-medium text-center text-gray-500 border-b-2 border-transparent px-4 py-3 hover:text-gray-600 hover:border-gray-300 transition-colors duration-300">Alan Bilgisi Seçmeli</button>
+                <button data-tab="GKS" class="semester-tab text-sm sm:text-base font-medium text-center text-gray-500 border-b-2 border-transparent px-4 py-3 hover:text-gray-600 hover:border-gray-300 transition-colors duration-300">Genel Kültür Seçmeli</button>
+            </div>
+        </div>
+
+        <main id="courses-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 card-container">
+            <!-- Ders kartları JavaScript ile buraya eklenecek -->
+        </main>
+    </div>
+
+    <!-- Modal Yapısı -->
+    <div id="course-modal" class="fixed inset-0 bg-gray-900 bg-opacity-50 flex items-center justify-center p-4 z-50 hidden opacity-0 modal-overlay">
+        <div class="bg-white rounded-lg shadow-xl w-full max-w-2xl max-h-[90vh] overflow-y-auto modal-content scale-95">
+            <div class="sticky top-0 bg-white border-b p-4 flex justify-between items-center z-10">
+                <h2 id="modal-title" class="text-xl font-bold text-gray-800">Ders Detayları</h2>
+                <button id="modal-close" class="text-gray-500 hover:text-gray-800 transition-colors">
+                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
+                </button>
+            </div>
+            <div id="modal-body" class="p-6">
+                <!-- Modal içeriği JavaScript ile buraya eklenecek -->
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // YALNIZCA sağlanan son CSV dosyasına göre oluşturulmuş, doğrulanmış ham ders verisi
+        const rawCourses = [
+            { semester: 1, type: 'Zorunlu', code: 'ATA121.1', name: 'Atatürk İlkeleri ve İnkılap Tarihi I', instructor: 'Öğr.Gör. HÜLYA ÖZLER', credits: '2+0', schedule: 'Cumartesi 10:30 - 12:20 [UZEM]', isUzem: true },
+            { semester: 1, type: 'Zorunlu', code: 'BT1001.1', name: 'Eğitimde Bilgi Teknolojileri', instructor: 'Dr. Öğr. Üyesi AHMET BİLAL YAPRAKDAL', credits: '3+2', schedule: 'Salı 08:30 - 13:50 [RTE.A1.Z11]', isUzem: false },
+            { semester: 1, type: 'Zorunlu', code: 'BT1001.2', name: 'Eğitimde Bilgi Teknolojileri', instructor: 'Dr. Öğr. Üyesi AHMET BİLAL YAPRAKDAL', credits: '3+2', schedule: 'Cuma 08:30 - 13:50 [RTE.A1.Z11]', isUzem: false },
+            { semester: 1, type: 'Zorunlu', code: 'BT1003.1', name: 'Eğitim Teknolojilerinin Temelleri', instructor: 'Doç.Dr. YAVUZ SAMUR', credits: '3+0', schedule: 'Pazartesi 08:30 - 11:20 [RTE.A1.108]', isUzem: false },
+            { semester: 1, type: 'Zorunlu', code: 'BT1003.2', name: 'Eğitim Teknolojilerinin Temelleri', instructor: 'Doç.Dr. YAVUZ SAMUR', credits: '3+0', schedule: 'Çarşamba 08:30 - 11:20 [RTE.A1.108]', isUzem: false },
+            { semester: 1, type: 'Zorunlu', code: 'MB1001.1', name: 'Eğitime Giriş', instructor: 'Dr. Öğr. Üyesi AHMET FEYZİ SATICI', credits: '3+0', schedule: 'Salı 13:00 - 15:50 [RTE.A1.105]', isUzem: false },
+            { semester: 1, type: 'Zorunlu', code: 'MBS1008.1', name: 'Eğitim Felsefesi', instructor: 'Dr. Öğr. Üyesi AHMET FEYZİ SATICI', credits: '3+0', schedule: 'Salı 16:00 - 18:50 [RTE.A1.105]', isUzem: false },
+            { semester: 1, type: 'Zorunlu', code: 'TRD121.1', name: 'Türk Dili I', instructor: 'Öğr.Gör.Dr. MEHMET FATİH KİRİŞ', credits: '2+0', schedule: 'Cumartesi 08:30 - 10:20 [UZEM]', isUzem: true },
+            { semester: 1, type: 'Zorunlu', code: 'YDA101.1', name: 'Yabancı Dil I', instructor: 'Öğr.Gör. AYŞE TOSUN', credits: '2+0', schedule: 'Cumartesi 13:00 - 14:50 [UZEM]', isUzem: true },
+            
+            { semester: 3, type: 'Zorunlu', code: 'BT2001.1', name: 'Bilişim Sistemleri Donanımı', instructor: 'Dr. Öğr. Üyesi İSMAİL TONBULOĞLU', credits: '2+2', schedule: 'Pazartesi 13:00 - 16:50 [RTE.A1.Z09]', isUzem: false },
+            { semester: 3, type: 'Zorunlu', code: 'BT2003.1', name: 'Çevrimiçi Arayüz Tasarımı', instructor: 'Doç.Dr. FERİDE KARACA', credits: '2+2', schedule: 'Salı 13:00 - 16:50 [RTE.A1.Z09]', isUzem: false },
+            { semester: 3, type: 'Zorunlu', code: 'BT2005.1', name: 'Eğitimde Grafik ve Canlandırma', instructor: 'Doç.Dr. YAVUZ SAMUR', credits: '2+2', schedule: 'Çarşamba 13:00 - 16:50 [RTE.A1.Z11]', isUzem: false },
+            { semester: 3, type: 'Zorunlu', code: 'BT2007.1', name: 'Temel Programlama', instructor: 'Prof.Dr. NESRİN ÖZDENER', credits: '2+2', schedule: 'Perşembe 08:30 - 12:20 [RTE.A1.Z09]', isUzem: false },
+            { semester: 3, type: 'Zorunlu', code: 'MB2001.1', name: 'Eğitimde Araştırma Yöntemleri', instructor: 'Dr. Öğr. Üyesi AHMET BİLAL YAPRAKDAL', credits: '3+0', schedule: 'Cuma 14:00 - 16:50 [RTE.A1.108]', isUzem: false },
+            { semester: 3, type: 'Zorunlu', code: 'MB2003.1', name: 'Öğretim İlke ve Yöntemleri', instructor: 'Doç.Dr. FERİDE KARACA', credits: '3+0', schedule: 'Salı 08:30 - 11:20 [RTE.A1.105]', isUzem: false },
+
+            { semester: 5, type: 'Zorunlu', code: 'BT3001.1', name: 'Bilgisayar Eğitiminde Öğretim Yöntemleri I', instructor: 'Doç.Dr. FERİDE KARACA', credits: '2+2', schedule: 'Pazartesi 13:00 - 16:50 [RTE.A1.105]', isUzem: false },
+            { semester: 5, type: 'Zorunlu', code: 'BT3003.1', name: 'Çoklu Ortam Tasarımı', instructor: 'Doç.Dr. YAVUZ SAMUR', credits: '2+2', schedule: 'Pazartesi 13:00 - 16:50 [RTE.A1.Z11]', isUzem: false },
+            { semester: 5, type: 'Zorunlu', code: 'BT3005.1', name: 'Fiziksel Programlama', instructor: 'Dr. Öğr. Üyesi İSMAİL TONBULOĞLU', credits: '2+2', schedule: 'Çarşamba 13:00 - 16:50 [RTE.A1.Z09]', isUzem: false },
+            { semester: 5, type: 'Zorunlu', code: 'BT3007.1', name: 'İnternet Tabanlı Programlama', instructor: 'Prof.Dr. NESRİN ÖZDENER', credits: '2+2', schedule: 'Salı 08:30 - 12:20 [RTE.A1.Z09]', isUzem: false },
+            { semester: 5, type: 'Zorunlu', code: 'GK4002.1', name: 'Topluma Hizmet Uygulamaları', instructor: 'Dr. Öğr. Üyesi AHMET BİLAL YAPRAKDAL', credits: '1+2', schedule: 'Perşembe 17:00 - 18:50 [RTE.A1.123]', isUzem: false },
+            { semester: 5, type: 'Zorunlu', code: 'MB2005.1', name: 'Eğitimde Ölçme ve Değerlendirme', instructor: 'Dr. Öğr. Üyesi AHMET BİLAL YAPRAKDAL', credits: '3+0', schedule: 'Perşembe 13:00 - 15:50 [RTE.A1.123]', isUzem: false },
+
+            { semester: 7, type: 'Zorunlu', code: 'BT4001.1', name: 'Proje Geliştirme ve Yönetimi I', instructor: 'Prof.Dr. NESRİN ÖZDENER', credits: '2+2', schedule: 'Perşembe 08:30 - 12:20 [RTE.A1.Z11]', isUzem: false },
+            { semester: 7, type: 'Zorunlu', code: 'BT4001.2', name: 'Proje Geliştirme ve Yönetimi I', instructor: 'Prof.Dr. NESRİN ÖZDENER', credits: '2+2', schedule: 'Perşembe 13:00 - 16:50 [RTE.A1.Z11]', isUzem: false },
+            { semester: 7, type: 'Zorunlu', code: 'MB4001.10', name: 'Öğretmenlik Uygulaması I', instructor: 'Dr. Öğr. Üyesi AHMET BİLAL YAPRAKDAL', credits: '2+6', schedule: 'Perşembe 17:00 - 18:50 [RTE.A1.123]', isUzem: false },
+            { semester: 7, type: 'Zorunlu', code: 'MB4001.11', name: 'Öğretmenlik Uygulaması I', instructor: 'Dr. Öğr. Üyesi İSMAİL TONBULOĞLU', credits: '2+6', schedule: 'Perşembe 17:00 - 18:50 [RTE.A1.126]', isUzem: false },
+            { semester: 7, type: 'Zorunlu', code: 'MB4001.5', name: 'Öğretmenlik Uygulaması I', instructor: 'Prof.Dr. NESRİN ÖZDENER', credits: '2+6', schedule: 'Perşembe 17:00 - 18:50 [RTE.A1.108]', isUzem: false },
+            { semester: 7, type: 'Zorunlu', code: 'MB4001.6', name: 'Öğretmenlik Uygulaması I', instructor: 'Doç.Dr. FERİDE KARACA', credits: '2+6', schedule: 'Perşembe 17:00 - 18:50 [RTE.A1.105]', isUzem: false },
+            { semester: 7, type: 'Zorunlu', code: 'MB4001.7', name: 'Öğretmenlik Uygulaması I', instructor: 'Dr. Öğr. Üyesi AHMET FEYZİ SATICI', credits: '2+6', schedule: 'Perşembe 17:00 - 18:50 [RTE.A1.105]', isUzem: false },
+            { semester: 7, type: 'Zorunlu', code: 'MB4001.8', name: 'Öğretmenlik Uygulaması I', instructor: 'Doç.Dr. YAVUZ SAMUR', credits: '2+6', schedule: 'Perşembe 17:00 - 18:50 [RTE.A1.108]', isUzem: false },
+            { semester: 7, type: 'Zorunlu', code: 'MB4003.1', name: 'Okullarda Rehberlik', instructor: 'Doç.Dr. MAKBULE KALI SOYER', credits: '3+0', schedule: 'Cuma 09:30 - 12:20 [RTE.A1.105]', isUzem: false },
+            { semester: 7, type: 'Zorunlu', code: 'MB4005.1', name: 'Bilişim Öğretim Programları', instructor: 'Dr. Öğr. Üyesi İSMAİL TONBULOĞLU', credits: '2+0', schedule: 'Pazartesi 08:30 - 10:20 [RTE.A1.108]', isUzem: false },
+            
+            { semester: null, type: 'BTS', code: 'BT3054.1', name: 'Eğitsel Oyun ve Oyunlaştırma', instructor: 'Doç.Dr. YAVUZ SAMUR', credits: '3+0', schedule: 'Çarşamba 17:00 - 19:50 [RTE.A1.108]', isUzem: false },
+            { semester: null, type: 'BTS', code: 'BT3056.1', name: 'İnsan ve Bilgisayar Etkileşimi', instructor: 'Doç.Dr. FERİDE KARACA', credits: '3+0', schedule: 'Pazartesi 08:30 - 11:20 [RTE.A1.105]', isUzem: false },
+            { semester: null, type: 'GKS', code: 'GKS2005.1', name: 'Mesleki İngilizce', instructor: 'Dr. Öğr. Üyesi İSMAİL TONBULOĞLU', credits: '3+0', schedule: 'Salı 08:30 - 11:20 [RTE.A1.126]', isUzem: false },
+            { semester: null, type: 'GKS', code: 'GKS2075.1', name: 'Eğitimde Yapay Zeka Uygulamaları', instructor: 'Prof.Dr. NESRİN ÖZDENER', credits: '3+0', schedule: 'Perşembe 13:00 - 15:50 [RTE.A1.108]', isUzem: false },
+        ];
+
+        const coursesGrid = document.getElementById('courses-grid');
+        const tabs = document.querySelectorAll('.semester-tab');
+        const modal = document.getElementById('course-modal');
+        const modalTitle = document.getElementById('modal-title');
+        const modalBody = document.getElementById('modal-body');
+        const modalClose = document.getElementById('modal-close');
+
+        const getDayFromSchedule = (schedule) => {
+            if (!schedule) return null;
+            return schedule.split(' ')[0];
+        };
+
+        const processCourses = (courses) => {
+            const groupedByName = courses.reduce((acc, course) => {
+                acc[course.name] = acc[course.name] || [];
+                acc[course.name].push(course);
+                return acc;
+            }, {});
+
+            const finalCourses = [];
+            for (const courseName in groupedByName) {
+                const group = groupedByName[courseName];
+                if (group.length <= 1) {
+                    finalCourses.push(group[0]);
+                    continue;
+                }
+
+                const firstDay = getDayFromSchedule(group[0].schedule);
+                const allSameDay = group.every(c => getDayFromSchedule(c.schedule) === firstDay);
+
+                if (allSameDay) {
+                    finalCourses.push({
+                        name: group[0].name,
+                        isGroup: true,
+                        semester: group[0].semester,
+                        type: group[0].type,
+                        credits: group[0].credits,
+                        instructors: group.map(c => ({
+                            code: c.code,
+                            instructor: c.instructor,
+                            schedule: c.schedule,
+                            isUzem: c.isUzem
+                        }))
+                    });
+                } else {
+                    group.forEach(course => finalCourses.push(course));
+                }
+            }
+            return finalCourses;
+        };
+        
+        const allCourses = processCourses(rawCourses);
+
+        const createCourseCard = (course) => {
+            const creditText = course.credits.includes('+') ? `T+U: ${course.credits}` : `${course.credits} Kredi`;
+
+            if (course.isGroup) {
+                return `
+                <div class="bg-white rounded-xl shadow-md overflow-hidden hover:shadow-xl hover:-translate-y-1 transition-all duration-300 grouped-card" data-course-name="${course.name}">
+                    <div class="p-6">
+                        <div class="tracking-wide text-sm text-indigo-500 font-semibold">${getDayFromSchedule(course.instructors[0].schedule)} Günü / ${course.instructors.length} Şube</div>
+                        <h3 class="block mt-1 text-lg leading-tight font-bold text-black">${course.name}</h3>
+                        <p class="mt-2 text-gray-500 text-sm">Farklı saatlerde veya hocalarda şubeler mevcut.</p>
+                        <div class="mt-4 flex justify-between items-center">
+                           <div class="text-sm font-semibold text-blue-700">Tüm Şubeleri Gör</div>
+                           <div class="text-sm font-semibold bg-blue-50 text-blue-700 px-3 py-1 rounded-full">${creditText}</div>
+                        </div>
+                    </div>
+                </div>
+                `;
+            }
+
+            const uzemBadge = course.isUzem ? `<span class="absolute top-3 right-3 bg-red-100 text-red-800 text-xs font-medium px-2.5 py-0.5 rounded-full">UZEM</span>` : '';
+            return `
+                <div class="bg-white rounded-xl shadow-md overflow-hidden hover:shadow-xl hover:-translate-y-1 transition-all duration-300 relative">
+                    <div class="p-6">
+                        ${uzemBadge}
+                        <div class="tracking-wide text-sm text-blue-500 font-semibold">${course.code}</div>
+                        <h3 class="block mt-1 text-lg leading-tight font-bold text-black">${course.name}</h3>
+                        <p class="mt-2 text-gray-500 text-sm">${course.instructor}</p>
+                        <div class="mt-4 flex justify-between items-center">
+                            <div class="flex items-center text-sm text-gray-600">
+                                <svg class="w-4 h-4 mr-1.5" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+                                <span>${course.schedule}</span>
+                            </div>
+                            <div class="text-sm font-semibold bg-blue-50 text-blue-700 px-3 py-1 rounded-full">${creditText}</div>
+                        </div>
+                    </div>
+                </div>
+            `;
+        };
+
+        const displayCourses = (tab) => {
+            coursesGrid.style.opacity = 0;
+            setTimeout(() => {
+                let filteredCourses;
+                if (['BTS', 'GKS'].includes(tab)) {
+                    filteredCourses = allCourses.filter(course => course.type === tab);
+                } else {
+                    const semester = parseInt(tab);
+                    filteredCourses = allCourses.filter(course => course.semester === semester);
+                }
+                coursesGrid.innerHTML = filteredCourses.map(createCourseCard).join('');
+                coursesGrid.style.opacity = 1;
+            }, 150);
+        };
+
+        tabs.forEach(tab => {
+            tab.addEventListener('click', () => {
+                tabs.forEach(t => t.classList.remove('tab-active'));
+                tab.classList.add('tab-active');
+                displayCourses(tab.dataset.tab);
+            });
+        });
+
+        const openModal = (courseName) => {
+            const courseGroup = allCourses.find(c => c.isGroup && c.name === courseName);
+            if (!courseGroup) return;
+
+            modalTitle.textContent = courseGroup.name;
+            modalBody.innerHTML = courseGroup.instructors.map(inst => `
+                <div class="border-b last:border-b-0 py-4">
+                    <p class="font-semibold text-gray-800">${inst.instructor}</p>
+                    <p class="text-sm text-gray-600 mt-1"><strong>Şube Kodu:</strong> ${inst.code}</p>
+                    <p class="text-sm text-gray-600 mt-1"><strong>Program:</strong> ${inst.schedule}</p>
+                </div>
+            `).join('');
+
+            modal.classList.remove('hidden');
+            setTimeout(() => {
+                modal.classList.remove('opacity-0');
+                if (modal.querySelector('.modal-content')) {
+                    modal.querySelector('.modal-content').classList.remove('scale-95');
+                }
+            }, 10);
+        };
+
+        const closeModal = () => {
+            modal.classList.add('opacity-0');
+            if (modal.querySelector('.modal-content')) {
+                modal.querySelector('.modal-content').classList.add('scale-95');
+            }
+            setTimeout(() => modal.classList.add('hidden'), 300);
+        };
+
+        coursesGrid.addEventListener('click', (e) => {
+            const card = e.target.closest('.grouped-card');
+            if (card) {
+                openModal(card.dataset.courseName);
+            }
+        });
+        
+        modalClose.addEventListener('click', closeModal);
+        modal.addEventListener('click', (e) => {
+            if (e.target === modal) closeModal();
+        });
+
+        window.addEventListener('DOMContentLoaded', () => {
+            displayCourses('1');
+        });
+
+    </script>
+</body>
+</html>
